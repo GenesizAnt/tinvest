@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.piapi.core.InvestApi;
 
-@Configuration
 public class InvestApiConfig {
 
     @Value("token")

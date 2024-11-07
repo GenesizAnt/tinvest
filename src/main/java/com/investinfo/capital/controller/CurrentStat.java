@@ -1,6 +1,5 @@
 package com.investinfo.capital.controller;
 
-import com.investinfo.capital.config.AuthInterceptor;
 import com.investinfo.capital.config.InvestApiConfig;
 import lombok.AccessLevel;
 import ru.tinkoff.piapi.contract.v1.*;
@@ -35,7 +34,6 @@ public class CurrentStat {
 
     private final InvestApiConfig investApiConfig;
     private final RestTemplate restTemplate;
-    private final AuthInterceptor authInterceptor = new AuthInterceptor(token);
 
     public void getStat() {
         String url = "";
