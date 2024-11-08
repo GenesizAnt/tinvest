@@ -3,6 +3,14 @@ spring.datasource.url=
 spring.datasource.username=
 spring.datasource.password=
 
-telegram.token=
-telegram.name=
-telegram.url=
+id_account=
+
+telegram.bot.token=
+telegram.bot.name=
+telegram.bot.url=
+
+valid.person.data.user=
+valid.person.data.firstName=
+valid.person.data.isBot=
+valid.person.data.lastName=
+valid.person.data.userName=
