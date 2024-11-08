@@ -1,9 +1,5 @@
 package com.investinfo.capital.controller;
 
-import com.investinfo.capital.config.InvestApiConfig;
-import lombok.AccessLevel;
-import ru.tinkoff.piapi.contract.v1.*;
-import io.grpc.Channel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -12,15 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestTemplate;
 import ru.tinkoff.piapi.contract.v1.Account;
 import ru.tinkoff.piapi.core.InvestApi;
-import ru.tinkoff.piapi.core.MarketDataService;
-import ru.tinkoff.piapi.core.OperationsService;
-import ru.tinkoff.piapi.core.UsersService;
 import ru.tinkoff.piapi.core.models.Portfolio;
 
-import java.time.temporal.ChronoUnit;
-
-import java.time.Instant;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -32,33 +21,38 @@ public class CurrentStat {
     @Value("${token}")
     private static String token;
 
-    private final InvestApiConfig investApiConfig;
-    private final RestTemplate restTemplate;
 
     public void getStat() {
         String url = "";
 //        InvestApi investApi = InvestApiConfig.init();
 //        UsersService userService = investApi.getUserService();
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
-        String responseBody = response.getBody();
-        System.out.println(responseBody);
+//        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+//        String responseBody = response.getBody();
+//        System.out.println(responseBody);
     }
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
-        InvestApi readonlyToken = InvestApi.createReadonly(token);
 
-        MarketDataService marketDataService = readonlyToken.getMarketDataService();
-        CompletableFuture<List<LastPrice>> lastPrices = marketDataService.getLastPrices(Collections.singleton("BBG004730N88"));
-        List<LastPrice> lastPrices1 = lastPrices.get();
-        System.out.println();
+
+
+        InvestApi readonlyToken = InvestApi.createReadonly(f);
+
+        CompletableFuture<Portfolio> portfolio = readonlyToken.getOperationsService().getPortfolio("");
+        Portfolio portfolio1 = portfolio.get();
+        System.out.println(portfolio1);
+
+//        MarketDataService marketDataService = readonlyToken.getMarketDataService();
+//        CompletableFuture<List<LastPrice>> lastPrices = marketDataService.getLastPrices(Collections.singleton("BBG004730N88"));
+//        List<LastPrice> lastPrices1 = lastPrices.get();
+//        System.out.println();
 
 
         //Получить счет и его состав
-        OperationsService operationsService = readonlyToken.getOperationsService();
-        CompletableFuture<Portfolio> portfolio = operationsService.getPortfolio(readonlyToken.getUserService().getAccounts().get().getFirst().getId());
-        Portfolio portfolio1 = portfolio.get();
-        System.out.println();
+//        OperationsService operationsService = readonlyToken.getOperationsService();
+//        CompletableFuture<Portfolio> portfolio = operationsService.getPortfolio(readonlyToken.getUserService().getAccounts().get().getFirst().getId());
+//        Portfolio portfolio1 = portfolio.get();
+//        System.out.println();
 
 
 
