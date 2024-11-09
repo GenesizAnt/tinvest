@@ -1,21 +1,28 @@
 package com.investinfo.capital.config;
 
-import com.investinfo.capital.telegram.BotProperties;
-import com.investinfo.capital.telegram.ValidationPerson;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.PropertySource;
+import ru.tinkoff.piapi.core.InvestApi;
 
-@EnableConfigurationProperties({BotProperties.class, ValidationPerson.class})
+import java.util.Map;
+
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.investinfo.capital"})
 public class CapitalApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CapitalApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CapitalApplication.class, args);
+    }
 
+    @Bean
+    public Map<String, String> userEnvironment() {
+        return System.getenv();
+    }
+
+    @Bean
+    public InvestApi investApi() {
+        return InvestApi.createReadonly(userEnvironment().get("C_TOKEN"));
+    }
 }

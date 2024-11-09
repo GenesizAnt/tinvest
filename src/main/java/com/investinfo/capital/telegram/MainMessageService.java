@@ -1,5 +1,6 @@
 package com.investinfo.capital.telegram;
 
+import com.investinfo.capital.controller.portfolio.PortfolioController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -9,9 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 @RequiredArgsConstructor
 @Service
@@ -21,20 +21,21 @@ public class MainMessageService {
     //ToDo вынести все сообщения и смайлы в отдельный класс констант или только смайлы?
 
     private final ValidationPerson validationPerson;
+    private final PortfolioController portfolioController;
 
     //Получает и обрабатывает сообщение отправленное в бот
-    public SendMessage messageReceiver(Update update) {
+    public SendMessage messageReceiver(Update update) throws ExecutionException, InterruptedException {
 
         if (validationPerson.isValid(update)) {
-            String text = update.getMessage().getText();
+            String[] text = update.getMessage().getText().split(" ");
             Long chatId = update.getMessage().getChatId();
-            String name = update.getMessage().getChat().getFirstName();
-            Integer messageId = update.getMessage().getMessageId();
 
 
-            String response;
-            switch (text) {
-                case "/start" -> {
+            String response = "1";
+            switch (text[0]) {
+                case "/amount" -> {
+                    response = portfolioController.getPortfolio();
+
 //                    if (userTelegramService.isUserNotFoundById(chatId)) {
 //                        registerUser(chatId, update.getMessage().getChat());
 //                        response = EmojiParser.parseToUnicode(String.format("Привет %s!" +
@@ -68,7 +69,7 @@ public class MainMessageService {
 
                 }
             }
-            return getReceiveMessage(chatId, "response");
+            return getReceiveMessage(chatId, response);
         }
         return getReceiveMessage(update.getMessage().getChatId(), "Извините, Вам нельзя отвечать, покиньте данный бот!");
     }

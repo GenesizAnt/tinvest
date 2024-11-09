@@ -1,7 +1,22 @@
 package com.investinfo.capital.telegram;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix = "telegram.bot")
-public record BotProperties(String name, String token) {
+import java.util.Map;
+
+@Getter
+@Setter
+@Component
+public class BotProperties {
+    private final String name;
+    private final String token;
+    private final Map<String, String> userEnvironment;
+
+    public BotProperties(Map<String, String> userEnvironment) {
+        this.name = userEnvironment.get("C_TG_NAME");
+        this.token = userEnvironment.get("C_TG_TOKEN");
+        this.userEnvironment = userEnvironment;
+    }
 }

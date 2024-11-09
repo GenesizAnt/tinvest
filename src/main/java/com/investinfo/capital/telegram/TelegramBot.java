@@ -1,5 +1,6 @@
 package com.investinfo.capital.telegram;
 
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class TelegramBot extends TelegramLongPollingBot  {
 
     @Autowired
     public TelegramBot(BotProperties botProperties, MainMessageService mainMessageService) {
-        super(botProperties.token());
+        super(botProperties.getToken());
         this.botProperties = botProperties;
         this.mainMessageService = mainMessageService;
         try {
@@ -34,6 +35,7 @@ public class TelegramBot extends TelegramLongPollingBot  {
 
     }
 
+    @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
         System.out.println();
@@ -48,7 +50,7 @@ public class TelegramBot extends TelegramLongPollingBot  {
 
     @Override
     public String getBotUsername() {
-        return botProperties.name();
+        return botProperties.getName();
     }
 
     @Override
@@ -58,8 +60,7 @@ public class TelegramBot extends TelegramLongPollingBot  {
 
     private List<BotCommand> listMenuCommand() {
         List<BotCommand> listOfCommands = new ArrayList<>();
-        listOfCommands.add(new BotCommand("/start", "Начало работы"));
-        listOfCommands.add(new BotCommand("/changepassword", "Изменить пароль"));
+        listOfCommands.add(new BotCommand("amount", "Общая статистика портфеля"));
         return listOfCommands;
     }
 }
