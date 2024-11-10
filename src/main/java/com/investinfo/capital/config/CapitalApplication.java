@@ -13,6 +13,7 @@ import java.util.Map;
 public class CapitalApplication {
 
     public static void main(String[] args) {
+        StartupChecker.checkCodeWord(); // Проверка кодового слова
         SpringApplication.run(CapitalApplication.class, args);
     }
 
