@@ -1,5 +1,6 @@
 package com.investinfo.capital.config;
 
+import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +14,7 @@ import java.util.Map;
 public class CapitalApplication {
 
     public static void main(String[] args) {
-        StartupChecker.checkCodeWord(); // Проверка кодового слова
+//        StartupChecker.checkCodeWord(); // Проверка кодового слова
         SpringApplication.run(CapitalApplication.class, args);
     }
 

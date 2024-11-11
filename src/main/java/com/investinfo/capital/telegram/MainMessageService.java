@@ -23,8 +23,12 @@ public class MainMessageService {
     private final ValidationPerson validationPerson;
     private final PortfolioController portfolioController;
 
+    @Value("${servpar}")
+    private String secr;
+
     //Получает и обрабатывает сообщение отправленное в бот
     public SendMessage messageReceiver(Update update) throws ExecutionException, InterruptedException {
+        System.out.println(secr);
 
         if (validationPerson.isValid(update)) {
             String[] text = update.getMessage().getText().split(" ");
