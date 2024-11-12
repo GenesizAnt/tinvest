@@ -2,15 +2,11 @@ package com.investinfo.capital.telegram;
 
 import com.investinfo.capital.controller.portfolio.PortfolioController;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @RequiredArgsConstructor
@@ -23,13 +19,8 @@ public class MainMessageService {
     private final ValidationPerson validationPerson;
     private final PortfolioController portfolioController;
 
-    @Value("${servpar}")
-    private String secr;
-
     //Получает и обрабатывает сообщение отправленное в бот
     public SendMessage messageReceiver(Update update) throws ExecutionException, InterruptedException {
-        System.out.println(secr);
-
         if (validationPerson.isValid(update)) {
             String[] text = update.getMessage().getText().split(" ");
             Long chatId = update.getMessage().getChatId();

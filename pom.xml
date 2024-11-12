@@ -85,11 +85,6 @@
 			<artifactId>jaxb-xjc</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-		<dependency>
-			<groupId>com.github.ulisesbocchio</groupId>
-			<artifactId>jasypt-spring-boot-starter</artifactId>
-			<version>3.0.5</version>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -105,11 +100,6 @@
 						</exclude>
 					</excludes>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.github.ulisesbocchio</groupId>
-				<artifactId>jasypt-maven-plugin</artifactId>
-				<version>3.0.5</version>
 			</plugin>
 		</plugins>
 	</build>
