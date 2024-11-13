@@ -1,5 +1,6 @@
 package com.investinfo.capital.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -24,5 +25,10 @@ public class CapitalApplication {
     @Bean
     public InvestApi investApi() {
         return InvestApi.createReadonly(userEnvironment().get("C_TOKEN"));
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 }

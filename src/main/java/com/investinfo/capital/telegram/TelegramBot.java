@@ -38,7 +38,6 @@ public class TelegramBot extends TelegramLongPollingBot  {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
-        System.out.println();
         SendMessage sendMessage = mainMessageService.messageReceiver(update);
         try {
             execute(sendMessage);
@@ -61,6 +60,7 @@ public class TelegramBot extends TelegramLongPollingBot  {
     private List<BotCommand> listMenuCommand() {
         List<BotCommand> listOfCommands = new ArrayList<>();
         listOfCommands.add(new BotCommand("amount", "Общая статистика портфеля"));
+        listOfCommands.add(new BotCommand("position", "Позиции без облигаций"));
         return listOfCommands;
     }
 }

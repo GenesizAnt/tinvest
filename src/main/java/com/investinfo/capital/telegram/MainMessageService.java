@@ -7,6 +7,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 @RequiredArgsConstructor
@@ -44,7 +47,8 @@ public class MainMessageService {
 //                        response = EmojiParser.parseToUnicode(String.format("Привет %s! Чем могу помочь? %s", name, ":blush:"));
 //                    }
                 }
-                case "/changepassword" -> {
+                case "/position" -> {
+                    response = portfolioController.getPositionWithoutBonds();
 //                    UserTelegram user = null;
 //                    response = "";
 //                    if (user == null) {
@@ -60,6 +64,9 @@ public class MainMessageService {
 //                        }
 //                    }
                 }
+                case "день" -> {
+                    response = getDayOfYear();
+                }
                 default -> {
 
                 }
@@ -67,6 +74,10 @@ public class MainMessageService {
             return getReceiveMessage(chatId, response);
         }
         return getReceiveMessage(update.getMessage().getChatId(), "Извините, Вам нельзя отвечать, покиньте данный бот!");
+    }
+
+    private String getDayOfYear() {
+        return String.format("Сегодня %d день %d года", LocalDate.now().getDayOfYear(), LocalDate.now().getYear());
     }
 
     //Обработка разных сценариев неизвестного сообщения от пользователя
