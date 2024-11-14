@@ -1,20 +1,23 @@
 package com.investinfo.capital.controller.portfolio;
 
+import com.investinfo.capital.dto.ShareDTO;
+import com.investinfo.capital.service.ImoexPositionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.piapi.core.models.Portfolio;
 import ru.tinkoff.piapi.core.models.Position;
-import ru.tinkoff.piapi.core.models.SecurityPosition;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Random;
-import java.util.random.RandomGenerator;
 
 import static com.investinfo.capital.controller.FormatUtils.formantNumber;
 import static com.investinfo.capital.controller.MathUtils.getPercentage;
 
 @Component
+@RequiredArgsConstructor
 public class PortfolioData {
+
+    private final ImoexPositionService positionService;
+
     public String getPortfolio(Portfolio portfolio) {
         return """
                 Общая сумма: %s
@@ -29,15 +32,15 @@ public class PortfolioData {
                 Доля золота: %s
                 Кэш: %s
                 """.formatted(
-                        formantNumber(portfolio.getTotalAmountPortfolio().getValue()),
-                        formantNumber(portfolio.getTotalAmountShares().getValue()),
-                        formantNumber(portfolio.getTotalAmountBonds().getValue()),
-                        formantNumber(portfolio.getTotalAmountEtfs().getValue()),
-                        formantNumber(portfolio.getTotalAmountCurrencies().getValue()),
-                        getPercentage(portfolio.getTotalAmountPortfolio().getValue(), portfolio.getTotalAmountShares().getValue()),
-                        getPercentage(portfolio.getTotalAmountPortfolio().getValue(), portfolio.getTotalAmountBonds().getValue()),
-                        getPercentage(portfolio.getTotalAmountPortfolio().getValue(), portfolio.getTotalAmountEtfs().getValue()),
-                        getPercentage(portfolio.getTotalAmountPortfolio().getValue(), portfolio.getTotalAmountCurrencies().getValue())
+                formantNumber(portfolio.getTotalAmountPortfolio().getValue()),
+                formantNumber(portfolio.getTotalAmountShares().getValue()),
+                formantNumber(portfolio.getTotalAmountBonds().getValue()),
+                formantNumber(portfolio.getTotalAmountEtfs().getValue()),
+                formantNumber(portfolio.getTotalAmountCurrencies().getValue()),
+                getPercentage(portfolio.getTotalAmountPortfolio().getValue(), portfolio.getTotalAmountShares().getValue()),
+                getPercentage(portfolio.getTotalAmountPortfolio().getValue(), portfolio.getTotalAmountBonds().getValue()),
+                getPercentage(portfolio.getTotalAmountPortfolio().getValue(), portfolio.getTotalAmountEtfs().getValue()),
+                getPercentage(portfolio.getTotalAmountPortfolio().getValue(), portfolio.getTotalAmountCurrencies().getValue())
         );
     }
 
@@ -50,19 +53,16 @@ public class PortfolioData {
     }
 
     private String getInfoPosition(Position position) {
-        Random random = new Random();
-        BigDecimal expectedYield = position.getExpectedYield();
-        BigDecimal value = position.getCurrentPrice().getValue();
-        BigDecimal subtract = position.getExpectedYield().subtract(position.getCurrentPrice().getValue());
+        ShareDTO share = positionService.getShareDTO(position.getFigi());
         return """
-                %-10s: | Текущая цена: %-8s | Доходность: %-6s
+                %-10s | Текущая цена: %-8s | Доходность: %-6s
                 
                 """.formatted(
-                        "a".repeat(random.nextInt(12) + 1),
+                share.getShortName(),
                 formantNumber(position.getCurrentPrice().getValue()),
                 getPercentage(
                         position.getAveragePositionPrice().getValue(),
-                        position.getAveragePositionPrice().getValue().subtract(position.getCurrentPrice().getValue()))
+                        position.getCurrentPrice().getValue().subtract(position.getAveragePositionPrice().getValue()))
         );
     }
 

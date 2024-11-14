@@ -14,4 +14,5 @@ public class ShareDTO {
     private String isin;
     private String name;
     private String sector;
+    private String shortName;
 }
