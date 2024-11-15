@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class ShareMapper {
+public class PositionMapper {
     private final ModelMapper modelMapper;
 
     public PositionDTO toDto(ImoexPosition position) {

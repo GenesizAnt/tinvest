@@ -19,7 +19,8 @@ class MainMessageServiceTest {
     public void setUp() {
         ValidationPerson validationPerson = Mockito.mock(ValidationPerson.class);
         PortfolioController portfolioController = Mockito.mock(PortfolioController.class);
-        messageService = new MainMessageService(validationPerson, portfolioController);
+        PrepareResponse prepareResponse = Mockito.mock(PrepareResponse.class);
+        messageService = new MainMessageService(validationPerson, portfolioController, prepareResponse);
     }
 
     @Test

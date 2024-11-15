@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.time.LocalDate;
 import java.util.concurrent.ExecutionException;
 
 @RequiredArgsConstructor
@@ -18,6 +17,7 @@ public class MainMessageService {
 
     private final ValidationPerson validationPerson;
     private final PortfolioController portfolioController;
+    private final PrepareResponse prepareResponse;
 
     public SendMessage messageReceiver(Update update) throws ExecutionException, InterruptedException {
         if (validationPerson.isValid(update)) {
@@ -34,26 +34,13 @@ public class MainMessageService {
         switch (text[0]) {
             case "/amount" -> response = portfolioController.getPortfolio();
             case "/position" -> response = portfolioController.getPositionWithoutBonds();
-            case "день" -> response = getDayOfYear();
-            case "/help" -> response = getAllCommand();
+            case "день" -> response = prepareResponse.getDayOfYear();
+            case "/diagram_sec" -> response = portfolioController.getDiagramSectorData();
+            case "/help" -> response = prepareResponse.getAllCommand();
             //ToDo сделать команду замены тикера и пр.
-            default -> {
-                response = getAllCommand();
-            }
+            default -> response = prepareResponse.getAllCommand();
         }
         return response;
-    }
-
-    private String getAllCommand() {
-        return """
-                /amount - Общая статистика портфеля
-                /position - Позиции без облигаций
-                день - Показать номер дня в году
-                """;
-    }
-
-    private String getDayOfYear() {
-        return String.format("Сегодня %d день %d года", LocalDate.now().getDayOfYear(), LocalDate.now().getYear());
     }
 
     private SendMessage getReceiveMessage(Long chatId, String response) {

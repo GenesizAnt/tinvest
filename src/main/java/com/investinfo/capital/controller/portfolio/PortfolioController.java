@@ -22,6 +22,10 @@ public class PortfolioController {
     public String getPositionWithoutBonds() throws ExecutionException, InterruptedException {
         return portfolioData.getPositionWithoutBonds(investApi.getOperationsService().getPortfolio(userEnvironment.get("C_PORT")).get());
     }
+
+    public String getDiagramSectorData() throws ExecutionException, InterruptedException {
+        return portfolioData.getDiagramSectorData(investApi.getOperationsService().getPortfolio(userEnvironment.get("C_PORT")).get());
+    }
 }
 
 
