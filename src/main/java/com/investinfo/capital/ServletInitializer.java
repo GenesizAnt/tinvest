@@ -1,6 +1,5 @@
-package com.investinfo.capital.config;
+package com.investinfo.capital;
 
-import com.investinfo.capital.CapitalApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 

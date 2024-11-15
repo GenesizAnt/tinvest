@@ -1,7 +1,5 @@
 package com.investinfo.capital.controller.portfolio;
 
-import com.investinfo.capital.config.EnigmaMachine;
-import com.investinfo.capital.dto.mapper.ShareMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import ru.tinkoff.piapi.core.InvestApi;
@@ -22,6 +20,10 @@ public class PortfolioController {
     }
 
     public String getPositionWithoutBonds() throws ExecutionException, InterruptedException {
+        return portfolioData.getPositionWithoutBonds(investApi.getOperationsService().getPortfolio(userEnvironment.get("C_PORT")).get());
+    }
+}
+
 
 //        Etf tcs10A101X50 = investApi.getInstrumentsService().getEtfByFigi("TCS10A101X50").get();
 //        System.out.println();
@@ -34,7 +36,3 @@ public class PortfolioController {
 //
 //        System.out.println();
 
-
-        return portfolioData.getPositionWithoutBonds(investApi.getOperationsService().getPortfolio(userEnvironment.get("C_PORT")).get());
-    }
-}

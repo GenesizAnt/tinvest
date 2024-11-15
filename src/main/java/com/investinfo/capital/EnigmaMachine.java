@@ -1,16 +1,6 @@
-package com.investinfo.capital.config;
+package com.investinfo.capital;
 
 import org.springframework.stereotype.Component;
-
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.security.AlgorithmParameters;
-import java.security.spec.KeySpec;
 
 @Component
 public class EnigmaMachine {

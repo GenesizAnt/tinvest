@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class ShareDTO {
+public class PositionDTO {
     private String figi;
     private String ticker;
     private String classCode;

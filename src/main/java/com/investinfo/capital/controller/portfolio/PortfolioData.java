@@ -1,6 +1,6 @@
 package com.investinfo.capital.controller.portfolio;
 
-import com.investinfo.capital.dto.ShareDTO;
+import com.investinfo.capital.dto.PositionDTO;
 import com.investinfo.capital.service.ImoexPositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -53,7 +53,7 @@ public class PortfolioData {
     }
 
     private String getInfoPosition(Position position) {
-        ShareDTO share = positionService.getShareDTO(position.getFigi());
+        PositionDTO share = positionService.getShareDTO(position.getFigi());
         return """
                 %-10s | Текущая цена: %-8s | Доходность: %-6s
                 
