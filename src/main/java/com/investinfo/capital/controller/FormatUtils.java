@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.investinfo.capital.controller.MathUtils.getPercentage;
+import static com.investinfo.capital.controller.MathUtils.getSumPositions;
 
 @RequiredArgsConstructor
 @Component
@@ -45,16 +46,22 @@ public class FormatUtils {
     }
 
     public String getSectorData(List<Position> position) {
+        Map<String, BigDecimal> sectorData = getDataFromPosition(position);
+        BigDecimal currSumPosition = getSumPositions(position);
+        return getSectorDataMsg(sectorData, currSumPosition);
+    }
 
-
-        Map<String, BigDecimal> sectorData = new HashMap<>();
-
-        BigDecimal currSumPosition = BigDecimal.ZERO;
-
-        for (Position currPosition : position) {
-            currSumPosition = currSumPosition.add(currPosition.getCurrentPrice().getValue().multiply(currPosition.getQuantity()));
+    private String getSectorDataMsg(Map<String, BigDecimal> sectorData, BigDecimal currSumPosition) {
+        StringBuilder result = new StringBuilder();
+        for (Map.Entry<String, BigDecimal> data : sectorData.entrySet()) {
+            String formattedLine = String.format("%-15s   %.2f%%", data.getKey().equals("it") ? data.getKey() + "       *****" : data.getKey(), data.getValue().divide(currSumPosition, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)));
+            result.append(formattedLine).append("\n");
         }
+        return result.toString();
+    }
 
+    private Map<String, BigDecimal> getDataFromPosition(List<Position> position) {
+        Map<String, BigDecimal> sectorData = new HashMap<>();
         for (Position currPosition : position) {
             PositionDTO share = positionService.getShareDTO(currPosition.getFigi());
             if (sectorData.containsKey(share.getSector())) {
@@ -63,14 +70,6 @@ public class FormatUtils {
                 sectorData.put(share.getSector(), currPosition.getCurrentPrice().getValue().multiply(currPosition.getQuantity()));
             }
         }
-
-
-        StringBuilder result = new StringBuilder();
-        for (Map.Entry<String, BigDecimal> data : sectorData.entrySet()) {
-            String formattedLine = String.format("%-15s   %.2f%%", data.getKey().equals("it") ? data.getKey() + "       *****" : data.getKey(), data.getValue().divide(currSumPosition, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)));
-            result.append(formattedLine).append("\n");
-        }
-
-        return result.toString();
+        return sectorData;
     }
 }
