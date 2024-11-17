@@ -4,14 +4,20 @@ import com.google.protobuf.Timestamp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import ru.tinkoff.piapi.contract.v1.BrokerReportResponse;
-import ru.tinkoff.piapi.contract.v1.GetBrokerReportResponse;
+import ru.tinkoff.piapi.contract.v1.GetOperationsByCursorResponse;
+import ru.tinkoff.piapi.contract.v1.Operation;
 import ru.tinkoff.piapi.core.InvestApi;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
+import static org.aspectj.bridge.Version.getTime;
 
 @RequiredArgsConstructor
 @Controller
@@ -30,61 +36,42 @@ public class PortfolioController {
     }
 
     public String getDiagramSectorData() throws ExecutionException, InterruptedException {
-
-        // Создаем два экземпляра LocalDate
-        LocalDate date1 = LocalDate.of(2024, 11, 1);
-        LocalDate date2 = LocalDate.now();
-
-        // Преобразуем LocalDate в Instant
-        Instant instant1 = date1.atStartOfDay(ZoneId.systemDefault()).toInstant();
-        Instant instant2 = date2.atStartOfDay(ZoneId.systemDefault()).toInstant();
-
-        // Создаем Timestamp на основе Instant
-        Timestamp timestamp1 = Timestamp.newBuilder()
-                .setSeconds(instant1.getEpochSecond())
-                .setNanos(instant1.getNano())
-                .build();
-
-        Timestamp timestamp2 = Timestamp.newBuilder()
-                .setSeconds(instant2.getEpochSecond())
-                .setNanos(instant2.getNano())
-                .build();
-
-
-        BrokerReportResponse cPort = investApi.getOperationsService().getBrokerReport(userEnvironment.get("C_PORT"), instant1, instant2).get();
-        System.out.println();
-
-
         return portfolioData.getDiagramSectorData(investApi.getOperationsService().getPortfolio(userEnvironment.get("C_PORT")).get());
     }
 
+    public String getReportPeriod(String from, String to) throws ExecutionException, InterruptedException {
 
-    public String getReportPeriod() throws ExecutionException, InterruptedException {
+        GetOperationsByCursorResponse cPort = investApi.getOperationsService().getOperationByCursor(userEnvironment.get("C_PORT"), getInstant(from), getInstant(to)).get();
+        List<Operation> cPort1 = investApi.getOperationsService().getAllOperations(userEnvironment.get("C_PORT"), getInstant(from), getInstant(to)).get();
+        System.out.println();
 
-        // Создаем два экземпляра LocalDate
-        LocalDate date1 = LocalDate.of(2024, 11, 1);
-        LocalDate date2 = LocalDate.now();
+//        // Создаем два экземпляра LocalDate
+//        LocalDate date1 = LocalDate.of(2024, 11, 1);
+//        LocalDate date2 = LocalDate.now();
+//        LocalDate parse = LocalDate.parse(from);
+//
+//        // Преобразуем LocalDate в Instant
 
-        // Преобразуем LocalDate в Instant
-        Instant instant1 = date1.atStartOfDay(ZoneId.systemDefault()).toInstant();
-        Instant instant2 = date2.atStartOfDay(ZoneId.systemDefault()).toInstant();
-
-        // Создаем Timestamp на основе Instant
-        Timestamp timestamp1 = Timestamp.newBuilder()
-                .setSeconds(instant1.getEpochSecond())
-                .setNanos(instant1.getNano())
-                .build();
-
-        Timestamp timestamp2 = Timestamp.newBuilder()
-                .setSeconds(instant2.getEpochSecond())
-                .setNanos(instant2.getNano())
-                .build();
+//        Instant perFrom = getInstant(from);
+//        Instant perTo = getInstant(to);
 
 
-        BrokerReportResponse cPort = investApi.getOperationsService().getBrokerReport(userEnvironment.get("C_PORT"), instant1, instant2).get();
+//        BrokerReportResponse cPort = investApi.getOperationsService().getBrokerReport(userEnvironment.get("C_PORT"), instant1, instant2).get();
 
+        return portfolioData.getReportPeriod(investApi.getOperationsService().getBrokerReport(userEnvironment.get("C_PORT"), getInstant(from), getInstant(to)).get());
+    }
 
-        return "";
+    private static Instant getInstant(String date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        long ts = 0;
+        try {
+            ts = dateFormat.parse(date).getTime() / 1000;
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        Instant instant = Instant.ofEpochSecond(ts);
+        System.out.println();
+        return Instant.ofEpochSecond(ts);
     }
 
 }

@@ -36,6 +36,7 @@ public class MainMessageService {
             case "/position" -> response = portfolioController.getPositionWithoutBonds();
             case "день" -> response = prepareResponse.getDayOfYear();
             case "/diagram_sec" -> response = portfolioController.getDiagramSectorData();
+            case "/report" -> response = portfolioController.getReportPeriod(text[1], text[2]);
             case "/help" -> response = prepareResponse.getAllCommand();
             //ToDo сделать команду замены тикера и пр.
             default -> response = prepareResponse.getAllCommand();

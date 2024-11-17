@@ -13,6 +13,7 @@ public class PrepareResponse {
                 /position - Позиции без облигаций
                 день - Показать номер дня в году
                 /diagram_sec - соотношение секторов
+                /report - отчет за период
                 """;
     }
 

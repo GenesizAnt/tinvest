@@ -59,6 +59,7 @@ public class TelegramBot extends TelegramLongPollingBot  {
         listOfCommands.add(new BotCommand("amount", "Общая статистика портфеля"));
         listOfCommands.add(new BotCommand("position", "Позиции без облигаций"));
         listOfCommands.add(new BotCommand("diagram_sec", "Доля секторов в портфеле"));
+        listOfCommands.add(new BotCommand("report", "Отчет за период"));
         listOfCommands.add(new BotCommand("help", "Список команд"));
         return listOfCommands;
     }
