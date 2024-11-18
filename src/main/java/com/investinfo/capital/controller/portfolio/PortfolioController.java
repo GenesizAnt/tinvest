@@ -41,9 +41,8 @@ public class PortfolioController {
 
     public String getReportPeriod(String from, String to) throws ExecutionException, InterruptedException {
 
-        GetOperationsByCursorResponse cPort = investApi.getOperationsService().getOperationByCursor(userEnvironment.get("C_PORT"), getInstant(from), getInstant(to)).get();
-        List<Operation> cPort1 = investApi.getOperationsService().getAllOperations(userEnvironment.get("C_PORT"), getInstant(from), getInstant(to)).get();
-        System.out.println();
+//        List<Operation> cPort1 = investApi.getOperationsService().getAllOperations(userEnvironment.get("C_PORT"), getInstant(from), getInstant(to)).get();
+//        System.out.println();
 
 //        // Создаем два экземпляра LocalDate
 //        LocalDate date1 = LocalDate.of(2024, 11, 1);
@@ -58,7 +57,7 @@ public class PortfolioController {
 
 //        BrokerReportResponse cPort = investApi.getOperationsService().getBrokerReport(userEnvironment.get("C_PORT"), instant1, instant2).get();
 
-        return portfolioData.getReportPeriod(investApi.getOperationsService().getBrokerReport(userEnvironment.get("C_PORT"), getInstant(from), getInstant(to)).get());
+        return portfolioData.getReportPeriod(investApi.getOperationsService().getAllOperations(userEnvironment.get("C_PORT"), getInstant(from), getInstant(to)).get());
     }
 
     private static Instant getInstant(String date) {

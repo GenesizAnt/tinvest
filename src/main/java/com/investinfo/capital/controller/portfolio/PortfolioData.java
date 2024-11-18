@@ -3,7 +3,7 @@ package com.investinfo.capital.controller.portfolio;
 import com.investinfo.capital.controller.FormatUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.tinkoff.piapi.contract.v1.BrokerReportResponse;
+import ru.tinkoff.piapi.contract.v1.Operation;
 import ru.tinkoff.piapi.core.models.Portfolio;
 import ru.tinkoff.piapi.core.models.Position;
 
@@ -57,9 +57,8 @@ public class PortfolioData {
         return msgData.getSectorData(positionWithoutBonds);
     }
 
-    public String getReportPeriod(BrokerReportResponse reportResponse) {
-        System.out.println(reportResponse);
-        return null;
+    public String getReportPeriod(List<Operation> reportResponse) {
+        return msgData.getReportPeriod(reportResponse);
     }
 
     //ToDo с НГ сделать метод по доходности (годовой и вообще)

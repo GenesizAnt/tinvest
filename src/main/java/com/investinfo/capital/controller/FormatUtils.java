@@ -1,9 +1,11 @@
 package com.investinfo.capital.controller;
 
+import com.investinfo.capital.dto.MoneyValueDTO;
 import com.investinfo.capital.dto.PositionDTO;
 import com.investinfo.capital.service.ImoexPositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.tinkoff.piapi.contract.v1.Operation;
 import ru.tinkoff.piapi.core.models.Position;
 
 import java.math.BigDecimal;
@@ -71,5 +73,34 @@ public class FormatUtils {
             }
         }
         return sectorData;
+    }
+
+    public String getReportPeriod(List<Operation> reportResponse) {
+        Map<String, BigDecimal> reportData = getReportDataMap(reportResponse);
+        return getResultReportData(reportData);
+    }
+
+    private String getResultReportData(Map<String, BigDecimal> reportData) {
+        StringBuilder result = new StringBuilder();
+        for (Map.Entry<String, BigDecimal> data : reportData.entrySet()) {
+            String formattedLine = String.format("%-10s : %2s", data.getKey(), formantNumber(data.getValue().setScale(2, RoundingMode.HALF_UP)));
+            result.append(formattedLine).append("\n");
+        }
+        return result.toString();
+    }
+
+    private Map<String, BigDecimal> getReportDataMap(List<Operation> reportResponse) {
+        Map<String, BigDecimal> reportData = new HashMap<>();
+        for (Operation operation : reportResponse) {
+            MoneyValueDTO moneyValue = new MoneyValueDTO(operation.getPayment());
+            if (operation.getState().getNumber() == 1) {
+                if (reportData.containsKey(operation.getType())) {
+                    reportData.computeIfPresent(operation.getType(), (payment, sumOperation) -> sumOperation.add(moneyValue.getMoneyValue()));
+                } else {
+                    reportData.put(operation.getType(), moneyValue.getMoneyValue());
+                }
+            }
+        }
+        return reportData;
     }
 }
