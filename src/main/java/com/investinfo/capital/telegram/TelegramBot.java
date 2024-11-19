@@ -2,6 +2,7 @@ package com.investinfo.capital.telegram;
 
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -19,12 +20,14 @@ public class TelegramBot extends TelegramLongPollingBot  {
 
     private final BotProperties botProperties;
     private final MainMessageService mainMessageService;
+    private final ScheduledMessageService scheduledMessageService;
 
     @Autowired
-    public TelegramBot(BotProperties botProperties, MainMessageService mainMessageService) {
+    public TelegramBot(BotProperties botProperties, MainMessageService mainMessageService, ScheduledMessageService scheduledMessageService) {
         super(botProperties.getToken());
         this.botProperties = botProperties;
         this.mainMessageService = mainMessageService;
+        this.scheduledMessageService = scheduledMessageService;
         try {
             this.execute(new SetMyCommands(listMenuCommand(), new BotCommandScopeDefault(),null));
         } catch (TelegramApiException e) {
@@ -43,6 +46,22 @@ public class TelegramBot extends TelegramLongPollingBot  {
             throw new RuntimeException(e);
         }
     }
+
+    @Scheduled(cron = "0 0 22 * * ?")
+    public void getAutoDayEndReport() {
+
+    }
+
+//    public void notifySendler() {
+//        List<SendMessage> messageList = notifyMessageService.messageReceiver();
+//        try {
+//            for (SendMessage sendMessage : messageList) {
+//                execute(sendMessage);
+//            }
+//        } catch (TelegramApiException e) {
+//            log.error("Ошибка отправки сообщений по расписанию: " + messageList + ". Текст ошибки: " + e.getMessage());
+//        }
+//    }
 
     @Override
     public String getBotUsername() {

@@ -8,8 +8,12 @@ import java.util.List;
 
 public class MathUtils {
 
-    public static String getPercentage(BigDecimal amount, BigDecimal portion) {
+    public static String getPercentageString(BigDecimal amount, BigDecimal portion) {
         return String.format("%.2f%%", portion.divide(amount, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)));
+    }
+
+    public static BigDecimal getPercentage(BigDecimal amount, BigDecimal portion) {
+        return portion.divide(amount, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
     }
 
     public static BigDecimal getSumPositions(List<Position> position) {

@@ -1,23 +1,14 @@
 package com.investinfo.capital.controller.portfolio;
 
-import com.google.protobuf.Timestamp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import ru.tinkoff.piapi.contract.v1.BrokerReportResponse;
-import ru.tinkoff.piapi.contract.v1.GetOperationsByCursorResponse;
-import ru.tinkoff.piapi.contract.v1.Operation;
 import ru.tinkoff.piapi.core.InvestApi;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-
-import static org.aspectj.bridge.Version.getTime;
 
 @RequiredArgsConstructor
 @Controller
@@ -40,24 +31,11 @@ public class PortfolioController {
     }
 
     public String getReportPeriod(String from, String to) throws ExecutionException, InterruptedException {
-
-//        List<Operation> cPort1 = investApi.getOperationsService().getAllOperations(userEnvironment.get("C_PORT"), getInstant(from), getInstant(to)).get();
-//        System.out.println();
-
-//        // Создаем два экземпляра LocalDate
-//        LocalDate date1 = LocalDate.of(2024, 11, 1);
-//        LocalDate date2 = LocalDate.now();
-//        LocalDate parse = LocalDate.parse(from);
-//
-//        // Преобразуем LocalDate в Instant
-
-//        Instant perFrom = getInstant(from);
-//        Instant perTo = getInstant(to);
-
-
-//        BrokerReportResponse cPort = investApi.getOperationsService().getBrokerReport(userEnvironment.get("C_PORT"), instant1, instant2).get();
-
         return portfolioData.getReportPeriod(investApi.getOperationsService().getAllOperations(userEnvironment.get("C_PORT"), getInstant(from), getInstant(to)).get());
+    }
+
+    public void getAutoMonthEndReport() {
+        portfolioData.getAutoMonthEndReport();
     }
 
     private static Instant getInstant(String date) {

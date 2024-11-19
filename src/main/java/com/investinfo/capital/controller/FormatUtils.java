@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.investinfo.capital.controller.MathUtils.getPercentage;
+import static com.investinfo.capital.controller.MathUtils.getPercentageString;
 import static com.investinfo.capital.controller.MathUtils.getSumPositions;
 
 @RequiredArgsConstructor
@@ -41,7 +41,7 @@ public class FormatUtils {
                 """.formatted(
                 share.getShortName(),
                 formantNumber(position.getCurrentPrice().getValue()),
-                getPercentage(
+                getPercentageString(
                         position.getAveragePositionPrice().getValue(),
                         position.getCurrentPrice().getValue().subtract(position.getAveragePositionPrice().getValue()))
         );
