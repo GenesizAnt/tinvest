@@ -47,9 +47,9 @@ public class FormatUtils {
         );
     }
 
-    public String getSectorData(List<Position> position) {
-        Map<String, BigDecimal> sectorData = getDataFromPosition(position);
-        BigDecimal currSumPosition = getSumPositions(position);
+    public String getSectorData(List<Position> positions) {
+        Map<String, BigDecimal> sectorData = getDataFromPosition(positions);
+        BigDecimal currSumPosition = getSumPositions(positions);
         return getSectorDataMsg(sectorData, currSumPosition);
     }
 
