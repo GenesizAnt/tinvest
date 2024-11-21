@@ -3,19 +3,19 @@ package com.investinfo.capital.dto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import ru.tinkoff.piapi.core.models.Money;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class PositionDTO {
+public class ImoexPositionDTO {
     private String figi;
+    private String ticker;
     private BigDecimal currentPrice;
-
-    public PositionDTO(String figi, Money currentPrice) {
-        this.figi = figi;
-        this.currentPrice = currentPrice.getValue();
-    }
+    private String classCode;
+    private String isin;
+    private String name;
+    private String sector;
+    private String shortName;
 }

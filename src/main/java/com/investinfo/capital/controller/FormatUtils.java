@@ -1,7 +1,7 @@
 package com.investinfo.capital.controller;
 
 import com.investinfo.capital.dto.MoneyValueDTO;
-import com.investinfo.capital.dto.PositionDTO;
+import com.investinfo.capital.dto.ImoexPositionDTO;
 import com.investinfo.capital.service.ImoexPositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -34,13 +34,13 @@ public class FormatUtils {
     }
 
     public String getInfoPosition(Position position) {
-        PositionDTO share = positionService.getShareDTO(position.getFigi());
+        ImoexPositionDTO share = positionService.getShareDTO(position.getFigi());
         return """
                 %-10s | Текущая цена: %-8s | Доходность: %-6s
                 
                 """.formatted(
                 share.getShortName(),
-                formantNumber(position.getCurrentPrice().getValue()),
+                formantNumber(position.getCurrentPrice().getValue()), //ToDo получать все нужно из ДТО
                 getPercentageString(
                         position.getAveragePositionPrice().getValue(),
                         position.getCurrentPrice().getValue().subtract(position.getAveragePositionPrice().getValue()))
@@ -65,7 +65,7 @@ public class FormatUtils {
     private Map<String, BigDecimal> getDataFromPosition(List<Position> position) {
         Map<String, BigDecimal> sectorData = new HashMap<>();
         for (Position currPosition : position) {
-            PositionDTO share = positionService.getShareDTO(currPosition.getFigi());
+            ImoexPositionDTO share = positionService.getShareDTO(currPosition.getFigi());
             if (sectorData.containsKey(share.getSector())) {
                 sectorData.computeIfPresent(share.getSector(), (price, sumSector) -> sumSector.add(currPosition.getCurrentPrice().getValue().multiply(currPosition.getQuantity())));
             } else {

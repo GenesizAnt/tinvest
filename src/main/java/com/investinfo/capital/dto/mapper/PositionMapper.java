@@ -1,17 +1,19 @@
 package com.investinfo.capital.dto.mapper;
 
-import com.investinfo.capital.dto.PositionDTO;
+import com.investinfo.capital.dto.ImoexPositionDTO;
 import com.investinfo.capital.model.ImoexPosition;
+import com.investinfo.capital.service.ImoexPositionService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+import ru.tinkoff.piapi.core.models.Position;
 
 @RequiredArgsConstructor
 @Component
 public class PositionMapper {
     private final ModelMapper modelMapper;
 
-    public PositionDTO toDto(ImoexPosition position) {
-        return modelMapper.map(position, PositionDTO.class);
+    public ImoexPositionDTO toDto(ImoexPosition position) {
+        return modelMapper.map(position, ImoexPositionDTO.class);
     }
 }

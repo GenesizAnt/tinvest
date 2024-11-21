@@ -53,7 +53,7 @@ public class TelegramBot extends TelegramLongPollingBot  {
 
     }
 
-    @Scheduled(cron = "*/5 * * * * *")
+    @Scheduled(cron = "*/3 * * * * *")
     public void getTestEveryDayEndReport() {
         SendMessage sendMessage = scheduledMessageService.getEveryDayEndReport();
     }
