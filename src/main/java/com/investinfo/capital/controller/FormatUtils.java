@@ -53,6 +53,24 @@ public class FormatUtils {
         return getSectorDataMsg(sectorData, currSumPosition);
     }
 
+    public String getMsgEveryDayEndReport(Map<String, String[]> growthPercentage) {
+        StringBuilder result = new StringBuilder();
+        for (Map.Entry<String, String[]> position : growthPercentage.entrySet()) {
+            result.append(
+
+                """
+                %-10s | Цена: %-8s | Рост: %-6s
+                
+                """.formatted(
+                        position.getKey(),
+                        position.getValue()[0],
+                        position.getValue()[1]
+                    )
+            );
+        }
+        return result.toString();
+    }
+
     private String getSectorDataMsg(Map<String, BigDecimal> sectorData, BigDecimal currSumPosition) {
         StringBuilder result = new StringBuilder();
         for (Map.Entry<String, BigDecimal> data : sectorData.entrySet()) {

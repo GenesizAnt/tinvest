@@ -10,7 +10,7 @@ public class PrepareResponse {
     public String getAllCommand() {
         return """
                 /amount - Общая статистика портфеля
-                /position - Позиции без облигаций
+                /position - Позиции без облигаций (цены и доходность)
                 день - Показать номер дня в году
                 /diagram_sec - соотношение секторов
                 /report - отчет за период

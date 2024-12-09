@@ -47,15 +47,21 @@ public class TelegramBot extends TelegramLongPollingBot  {
         }
     }
 
-    //Todo метод раз в месяц сделать
     @Scheduled(cron = "0 0 22 * * ?")
     public void getAutoDayEndReport() {
 
     }
 
-    @Scheduled(cron = "*/3 * * * * *")
+    //Todo отчет по долям акций позиции в портфеле
+
+    @Scheduled(cron = "*/15 * * * * *")
     public void getTestEveryDayEndReport() {
         SendMessage sendMessage = scheduledMessageService.getEveryDayEndReport();
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 //    public void notifySendler() {

@@ -31,69 +31,72 @@ public class SnapshotPositionService {
     private final PositionMapper positionMapper;
     private final ImoexPositionService imoexPositionService;
     private final FormatUtils formatUtils;
+    private static final Integer ONE_DAY = 1;
 
     public String getEveryDayEndReport(Portfolio portfolio) {
-        List<SnapshotPosition> byDateSnapshot = snapshotPositionRepository.findByDateSnapshot(LocalDate.now().minusDays(2));
+        List<SnapshotPosition> byDateSnapshot = snapshotPositionRepository.findByDateSnapshot(LocalDate.now().minusDays(ONE_DAY));
         List<Position> allPositions = portfolio.getPositions();
         List<Position> positionWithoutBonds = allPositions.stream()
                 .filter(position -> !position.getInstrumentType().equals("bond") && !position.getInstrumentType().equals("currency")).toList();
+
         Map<String, String[]> resultMap = new HashMap<>();
 
-        List<Map<String, BigDecimal>> tickerAndAmountMap = snapshotPositionRepository.findTickerAndAmountMap();
+        List<Map<String, BigDecimal>> tickerAndAmountMap = snapshotPositionRepository.findTickerAndAmountMap(LocalDate.now().minusDays(ONE_DAY));
 
 
         List<ImoexPositionDTO> imoexPositionDTOList = new ArrayList<>();
         positionWithoutBonds.forEach(position -> imoexPositionDTOList.add(toImoexDTO(position)));
 
-
-
-//        List<PositionDTO> positionDTOList = new ArrayList<>();
-//        List<ImoexPositionDTO> imoexPositionDTOList = new ArrayList<>();
-//        allPositions.forEach(position -> {
-//            positionDTOList.add(toDto(position));
-//        });
-//
-//        positionDTOList.forEach(position -> {
-//            imoexPositionDTOList.add(positionMapper.toDtoImoex(position));
-//        });
-
         imoexPositionDTOList.forEach(positionDTO -> {
-            System.out.println();
             for (int i = 0; i < byDateSnapshot.size(); i++) {
                 if (byDateSnapshot.get(i).getTicker().equals(positionDTO.getTicker())) {
                     resultMap.put(positionDTO.getName(),
-                            new String[] {
+                            new String[]{
                                     formatUtils.formantNumber(positionDTO.getCurrentPrice()),
-//                            getPercentageString(byDateSnapshot.get(i).getAmount(), byDateSnapshot.get(i).getAmount().subtract(positionDTO.getCurrentPrice()))});
-                            getPercentageString(byDateSnapshot.get(i).getAmount(), positionDTO.getCurrentPrice().subtract(byDateSnapshot.get(i).getAmount()))});
+                                    getPercentageString(byDateSnapshot.get(i).getAmount(), positionDTO.getCurrentPrice().subtract(byDateSnapshot.get(i).getAmount()))});
                 }
-
-//
-//                if (tickerAndAmountMap.get(i).containsKey(positionDTO.getTicker())) {
-//                    resultMap.put(positionDTO.getName(),
-//                            (tickerAndAmountMap.get(i).get(positionDTO.getTicker()).subtract(positionDTO.getCurrentPrice())).divide(positionDTO.getCurrentPrice()));
-//                }
             }
-
         });
 
-        System.out.println();
 
-//        Map<String, BigDecimal> sectorData = getDataFromPosition(allPositions);
-        BigDecimal currSumPosition = getSumPositions(allPositions);
+        Map<String, String[]> growthPercentage = sortByGrowthPercentage(resultMap);
 
+        String msg = msgData.getMsgEveryDayEndReport(growthPercentage);
 
-
-        return "result.toString()";
+        return msg;
     }
 
     private ImoexPositionDTO toImoexDTO(Position position) {
         return imoexPositionService.toDtoImoex(position);
     }
 
-    private PositionDTO toDto(Position position) {
-        return new PositionDTO(position.getFigi(), position.getCurrentPrice());
+    public static Map<String, String[]> sortByGrowthPercentage(Map<String, String[]> map) {
+        List<Map.Entry<String, String[]>> list = new ArrayList<>(map.entrySet());
+
+        list.sort((entry1, entry2) -> {
+            double growth1 = parseGrowthPercentage(entry1.getValue()[1]);
+            double growth2 = parseGrowthPercentage(entry2.getValue()[1]);
+            return Double.compare(growth2, growth1);
+        });
+
+        Map<String, String[]> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<String, String[]> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedMap;
     }
+
+    private static double parseGrowthPercentage(String percentage) {
+        // Удаляем символ процента и заменяем запятую на точку
+        String cleanedPercentage = percentage.replace("%", "").replace(',', '.');
+        return Double.parseDouble(cleanedPercentage);
+    }
+
+//
+//    private PositionDTO toDto(Position position) {
+//        return new PositionDTO(position.getFigi(), position.getCurrentPrice());
+//    }
 
 //    private Map<String, BigDecimal> getDataFromPosition(List<Position> position) {
 //        Map<String, BigDecimal> sectorData = new HashMap<>();
