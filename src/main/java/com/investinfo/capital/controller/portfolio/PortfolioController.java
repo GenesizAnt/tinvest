@@ -18,13 +18,13 @@ public class PortfolioController {
     private final Map<String, String> userEnvironment;
     private final PortfolioData portfolioData;
 
-    public String getPortfolio() throws ExecutionException, InterruptedException {
-        return portfolioData.getPortfolio(investApi.getOperationsService().getPortfolio(userEnvironment.get("C_PORT")).get());
-    }
+//    public String getPortfolio() throws ExecutionException, InterruptedException {
+//        return portfolioData.getPortfolio(investApi.getOperationsService().getPortfolio(userEnvironment.get("C_PORT")).get());
+//    }
 
-    public String getPositionWithoutBonds() throws ExecutionException, InterruptedException {
-        return portfolioData.getPositionWithoutBonds(investApi.getOperationsService().getPortfolio(userEnvironment.get("C_PORT")).get());
-    }
+//    public String getPositionWithoutBonds() throws ExecutionException, InterruptedException {
+//        return portfolioData.getPositionWithoutBonds(investApi.getOperationsService().getPortfolio(userEnvironment.get("C_PORT")).get());
+//    }
 
     public String getDiagramSectorData() throws ExecutionException, InterruptedException {
         return portfolioData.getDiagramSectorData(investApi.getOperationsService().getPortfolio(userEnvironment.get("C_PORT")).get());

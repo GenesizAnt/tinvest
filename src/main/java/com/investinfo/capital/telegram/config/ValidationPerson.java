@@ -1,4 +1,4 @@
-package com.investinfo.capital.telegram;
+package com.investinfo.capital.telegram.config;
 
 import lombok.Getter;
 import lombok.Setter;

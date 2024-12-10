@@ -1,4 +1,4 @@
-package com.investinfo.capital.telegram;
+package com.investinfo.capital.telegram.msgsender;
 
 import org.springframework.stereotype.Component;
 

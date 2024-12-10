@@ -1,4 +1,4 @@
-package com.investinfo.capital.controller;
+package com.investinfo.capital.usecase;
 
 import com.investinfo.capital.dto.MoneyValueDTO;
 import com.investinfo.capital.dto.ImoexPositionDTO;
@@ -10,28 +10,26 @@ import ru.tinkoff.piapi.core.models.Position;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import static com.investinfo.capital.controller.MathUtils.getPercentageString;
-import static com.investinfo.capital.controller.MathUtils.getSumPositions;
+import static com.investinfo.capital.usecase.utils.FormatNumberUtils.formantNumber;
+import static com.investinfo.capital.usecase.utils.MathUtils.getPercentageString;
+import static com.investinfo.capital.usecase.utils.MathUtils.getSumPositions;
 
 @RequiredArgsConstructor
 @Component
-public class FormatUtils {
+public class PortfolioMessageReport {
 
     private final ImoexPositionService positionService;
 
-    public String formantNumber(BigDecimal amount) {
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
-        symbols.setDecimalSeparator('.');
-        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", symbols);
-        return decimalFormat.format(amount);
-    }
+//    public String formantNumber(BigDecimal amount) {
+//        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+//        symbols.setDecimalSeparator('.');
+//        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", symbols);
+//        return decimalFormat.format(amount);
+//    }
 
     public String getInfoPosition(Position position) {
         ImoexPositionDTO share = positionService.getShareDTO(position.getFigi());

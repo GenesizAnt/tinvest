@@ -1,4 +1,4 @@
-package com.investinfo.capital.telegram;
+package com.investinfo.capital.telegram.msgsender;
 
 import com.investinfo.capital.service.SnapshotPositionService;
 import lombok.RequiredArgsConstructor;

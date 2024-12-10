@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.investinfo.capital.controller.MathUtils.*;
+import static com.investinfo.capital.usecase.utils.MathUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MathUtilsTest {

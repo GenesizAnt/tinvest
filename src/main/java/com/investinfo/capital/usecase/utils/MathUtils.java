@@ -1,4 +1,4 @@
-package com.investinfo.capital.controller;
+package com.investinfo.capital.usecase.utils;
 
 import ru.tinkoff.piapi.core.models.Position;
 

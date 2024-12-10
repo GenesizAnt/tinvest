@@ -1,5 +1,6 @@
-package com.investinfo.capital.telegram;
+package com.investinfo.capital.telegram.config;
 
+import com.investinfo.capital.telegram.TelegramBot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;

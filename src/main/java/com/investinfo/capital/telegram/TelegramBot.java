@@ -1,5 +1,8 @@
 package com.investinfo.capital.telegram;
 
+import com.investinfo.capital.telegram.config.BotProperties;
+import com.investinfo.capital.telegram.msgsender.MainMessageService;
+import com.investinfo.capital.telegram.msgsender.ScheduledMessageService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,7 +36,6 @@ public class TelegramBot extends TelegramLongPollingBot  {
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @SneakyThrows
@@ -47,6 +49,7 @@ public class TelegramBot extends TelegramLongPollingBot  {
         }
     }
 
+    //Todo этому методу здесь место??????????????????
     @Scheduled(cron = "0 0 22 * * ?")
     public void getAutoDayEndReport() {
 
@@ -54,7 +57,8 @@ public class TelegramBot extends TelegramLongPollingBot  {
 
     //Todo отчет по долям акций позиции в портфеле
 
-    @Scheduled(cron = "*/15 * * * * *")
+    //Todo этому методу здесь место??????????????????
+//    @Scheduled(cron = "*/15 * * * * *")
     public void getTestEveryDayEndReport() {
         SendMessage sendMessage = scheduledMessageService.getEveryDayEndReport();
         try {

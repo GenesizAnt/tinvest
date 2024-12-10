@@ -1,12 +1,9 @@
 package com.investinfo.capital.service;
 
-import com.investinfo.capital.controller.FormatUtils;
+import com.investinfo.capital.usecase.PortfolioMessageReport;
 import com.investinfo.capital.dto.ImoexPositionDTO;
-import com.investinfo.capital.dto.PositionDTO;
 import com.investinfo.capital.dto.mapper.PositionMapper;
-import com.investinfo.capital.model.ImoexPosition;
 import com.investinfo.capital.model.SnapshotPosition;
-import com.investinfo.capital.repository.ImoexPositionRepository;
 import com.investinfo.capital.repository.SnapshotPositionRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -18,19 +15,18 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
-import static com.investinfo.capital.controller.MathUtils.getPercentageString;
-import static com.investinfo.capital.controller.MathUtils.getSumPositions;
+import static com.investinfo.capital.usecase.utils.FormatNumberUtils.formantNumber;
+import static com.investinfo.capital.usecase.utils.MathUtils.getPercentageString;
 
 @Service
 @RequiredArgsConstructor
 public class SnapshotPositionService {
 
     private final SnapshotPositionRepository snapshotPositionRepository;
-    private final FormatUtils msgData;
+    private final PortfolioMessageReport portfolioMessageReport;
     private final ModelMapper modelMapper;
     private final PositionMapper positionMapper;
     private final ImoexPositionService imoexPositionService;
-    private final FormatUtils formatUtils;
     private static final Integer ONE_DAY = 1;
 
     public String getEveryDayEndReport(Portfolio portfolio) {
@@ -52,7 +48,7 @@ public class SnapshotPositionService {
                 if (byDateSnapshot.get(i).getTicker().equals(positionDTO.getTicker())) {
                     resultMap.put(positionDTO.getName(),
                             new String[]{
-                                    formatUtils.formantNumber(positionDTO.getCurrentPrice()),
+                                    formantNumber(positionDTO.getCurrentPrice()),
                                     getPercentageString(byDateSnapshot.get(i).getAmount(), positionDTO.getCurrentPrice().subtract(byDateSnapshot.get(i).getAmount()))});
                 }
             }
@@ -61,7 +57,7 @@ public class SnapshotPositionService {
 
         Map<String, String[]> growthPercentage = sortByGrowthPercentage(resultMap);
 
-        String msg = msgData.getMsgEveryDayEndReport(growthPercentage);
+        String msg = portfolioMessageReport.getMsgEveryDayEndReport(growthPercentage);
 
         return msg;
     }
