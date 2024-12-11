@@ -15,13 +15,13 @@ public class ImoexPositionService {
     private final ImoexPositionRepository imoexPositionRepository;
     private final PositionMapper positionMapper;
 
-    public ImoexPositionDTO getShareDTO(String figi) {
+    public ImoexPositionDTO getImoexPositionDTO(String figi) {
         ImoexPosition position = imoexPositionRepository.getImoexPositionByFigi(figi);
         return positionMapper.toDto(position);
     }
 
-    public ImoexPositionDTO toDtoImoex(Position position) {
-        ImoexPositionDTO shareDTO = getShareDTO(position.getFigi());
+    public ImoexPositionDTO toDto(Position position) {
+        ImoexPositionDTO shareDTO = getImoexPositionDTO(position.getFigi());
         shareDTO.setCurrentPrice(position.getCurrentPrice().getValue());
         return shareDTO;
     }

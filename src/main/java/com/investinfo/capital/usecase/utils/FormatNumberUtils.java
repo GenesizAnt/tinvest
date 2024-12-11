@@ -1,6 +1,5 @@
 package com.investinfo.capital.usecase.utils;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -16,5 +15,11 @@ public class FormatNumberUtils {
         symbols.setDecimalSeparator('.');
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", symbols);
         return decimalFormat.format(amount);
+    }
+
+    // Удалить символ процента и заменить запятую на точку
+    public static double parseGrowthPercentage(String percentage) {
+        String cleanedPercentage = percentage.replace("%", "").replace(',', '.');
+        return Double.parseDouble(cleanedPercentage);
     }
 }

@@ -1,39 +1,25 @@
 package com.investinfo.capital.telegram.msgsender;
 
-import com.investinfo.capital.service.SnapshotPositionService;
+import com.investinfo.capital.config.EnvironmentParam;
+import com.investinfo.capital.usecase.message.ServiceMessagesInitiatedApp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import ru.tinkoff.piapi.core.InvestApi;
 
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @RequiredArgsConstructor
 @Service
-public class ScheduledMessageService {
+public class ScheduledMessageService extends MessageService {
 
-    private final SnapshotPositionService snapshotPositionService;
-    private final InvestApi investApi;
-    private final Map<String, String> userEnvironment;
+    private final EnvironmentParam environmentParam;
+    private final ServiceMessagesInitiatedApp messagesInitiatedApp;
 
     public SendMessage getEveryDayEndReport() {
         try {
-            return getReceiveMessage(
-                    Long.valueOf(userEnvironment.get("C_USER")),
-                    snapshotPositionService.getEveryDayEndReport(
-                            investApi.getOperationsService().getPortfolio(
-                                    userEnvironment.get("C_PORT")).get()));
+            return getReceiveMessage(environmentParam.tgChatId(), messagesInitiatedApp.getEveryDayEndReport());
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    //ToDO дублирующийся код
-    private SendMessage getReceiveMessage(Long chatId, String response) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText(response);
-        return sendMessage;
     }
 }

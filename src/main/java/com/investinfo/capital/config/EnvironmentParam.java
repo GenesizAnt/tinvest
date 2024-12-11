@@ -18,4 +18,28 @@ public class EnvironmentParam {
     public Long tgChatId() {
         return Long.valueOf(userEnvironment.get("C_USER"));
     }
+
+    public String tgNameBot() {
+        return userEnvironment.get("C_TG_NAME");
+    }
+
+    public String tgToken() {
+        return userEnvironment.get("C_TG_TOKEN");
+    }
+
+    public String firstName() {
+        return userEnvironment.get("C_F_NAME");
+    }
+
+    public String lastName() {
+        return userEnvironment.get("C_L_NAME");
+    }
+
+    public String tgUserName() {
+        return userEnvironment.get("C_USERNAME");
+    }
+
+    public Boolean isBot() {
+        return Boolean.valueOf(userEnvironment.get("C_IS_BOT"));
+    }
 }

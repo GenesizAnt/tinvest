@@ -1,5 +1,6 @@
 package com.investinfo.capital.telegram.config;
 
+import com.investinfo.capital.config.EnvironmentParam;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -17,15 +18,15 @@ public class ValidationPerson {
     private final String lastName;
     private final Boolean isBot;
     private final String userName;
-    private final Map<String, String> userEnvironment;
+    private final EnvironmentParam environmentParam;
 
-    public ValidationPerson(Map<String, String> userEnvironment) {
-        this.user = Long.valueOf(userEnvironment.get("C_USER"));
-        this.firstName = userEnvironment.get("C_F_NAME");
-        this.lastName = userEnvironment.get("C_L_NAME");
-        this.isBot = Boolean.valueOf(userEnvironment.get("C_IS_BOT"));
-        this.userName = userEnvironment.get("C_USERNAME");
-        this.userEnvironment = userEnvironment;
+    public ValidationPerson(EnvironmentParam environmentParam) {
+        this.environmentParam = environmentParam;
+        this.user = environmentParam.tgChatId();
+        this.firstName = environmentParam.firstName();
+        this.lastName = environmentParam.lastName();
+        this.isBot = environmentParam.isBot();
+        this.userName = environmentParam.tgUserName();
     }
 
     public boolean isValid(Update update) {

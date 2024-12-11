@@ -1,10 +1,9 @@
 package com.investinfo.capital.telegram.config;
 
+import com.investinfo.capital.config.EnvironmentParam;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @Getter
 @Setter
@@ -12,11 +11,11 @@ import java.util.Map;
 public class BotProperties {
     private final String name;
     private final String token;
-    private final Map<String, String> userEnvironment;
+    private final EnvironmentParam environmentParam;
 
-    public BotProperties(Map<String, String> userEnvironment) {
-        this.name = userEnvironment.get("C_TG_NAME");
-        this.token = userEnvironment.get("C_TG_TOKEN");
-        this.userEnvironment = userEnvironment;
+    public BotProperties(EnvironmentParam environmentParam) {
+        this.environmentParam = environmentParam;
+        this.name = environmentParam.tgNameBot();
+        this.token = environmentParam.tgToken();
     }
 }

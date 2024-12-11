@@ -1,11 +1,10 @@
 package com.investinfo.capital.usecase;
 
-import com.investinfo.capital.dto.MoneyValueDTO;
 import com.investinfo.capital.dto.ImoexPositionDTO;
 import com.investinfo.capital.service.ImoexPositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.tinkoff.piapi.contract.v1.Operation;
+import ru.tinkoff.piapi.core.models.Portfolio;
 import ru.tinkoff.piapi.core.models.Position;
 
 import java.math.BigDecimal;
@@ -24,25 +23,49 @@ public class PortfolioMessageReport {
 
     private final ImoexPositionService positionService;
 
-//    public String formantNumber(BigDecimal amount) {
-//        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
-//        symbols.setDecimalSeparator('.');
-//        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", symbols);
-//        return decimalFormat.format(amount);
-//    }
-
-    public String getInfoPosition(Position position) {
-        ImoexPositionDTO share = positionService.getShareDTO(position.getFigi());
+    public String getPortfolioOverview(Portfolio portfolio) {
         return """
-                %-10s | Текущая цена: %-8s | Доходность: %-6s
+                Общая сумма: %s
                 
+                Сумма акций: %s
+                Сумма облигаций: %s
+                Сумма золота: %s
+                Кэш: %s
+                
+                Доля акций: %s
+                Доля облигаций: %s
+                Доля золота: %s
+                Кэш: %s
                 """.formatted(
-                share.getShortName(),
-                formantNumber(position.getCurrentPrice().getValue()), //ToDo получать все нужно из ДТО
-                getPercentageString(
-                        position.getAveragePositionPrice().getValue(),
-                        position.getCurrentPrice().getValue().subtract(position.getAveragePositionPrice().getValue()))
+                formantNumber(portfolio.getTotalAmountPortfolio().getValue()),
+                formantNumber(portfolio.getTotalAmountShares().getValue()),
+                formantNumber(portfolio.getTotalAmountBonds().getValue()),
+                formantNumber(portfolio.getTotalAmountEtfs().getValue()),
+                formantNumber(portfolio.getTotalAmountCurrencies().getValue()),
+                getPercentageString(portfolio.getTotalAmountPortfolio().getValue(), portfolio.getTotalAmountShares().getValue()),
+                getPercentageString(portfolio.getTotalAmountPortfolio().getValue(), portfolio.getTotalAmountBonds().getValue()),
+                getPercentageString(portfolio.getTotalAmountPortfolio().getValue(), portfolio.getTotalAmountEtfs().getValue()),
+                getPercentageString(portfolio.getTotalAmountPortfolio().getValue(), portfolio.getTotalAmountCurrencies().getValue())
         );
+    }
+
+    public String getInfoPosition(List<Position> position) {
+        StringBuilder textMessage = new StringBuilder();
+        for (Position security : position) {
+            ImoexPositionDTO share = positionService.getImoexPositionDTO(security.getFigi());
+            textMessage.append(
+                    """
+                            %-10s | Текущая цена: %-8s | Доходность: %-6s
+                            
+                            """.formatted(
+                            share.getShortName(),
+                            formantNumber(security.getCurrentPrice().getValue()),
+                            getPercentageString(
+                                    security.getAveragePositionPrice().getValue(),
+                                    security.getCurrentPrice().getValue().subtract(security.getAveragePositionPrice().getValue()))
+                    ));
+        }
+        return textMessage.toString();
     }
 
     public String getSectorData(List<Position> positions) {
@@ -56,13 +79,13 @@ public class PortfolioMessageReport {
         for (Map.Entry<String, String[]> position : growthPercentage.entrySet()) {
             result.append(
 
-                """
-                %-10s | Цена: %-8s | Рост: %-6s
-                
-                """.formatted(
-                        position.getKey(),
-                        position.getValue()[0],
-                        position.getValue()[1]
+                    """
+                            %-10s | Цена: %-8s | Рост: %-6s
+                            
+                            """.formatted(
+                            position.getKey(),
+                            position.getValue()[0],
+                            position.getValue()[1]
                     )
             );
         }
@@ -81,7 +104,7 @@ public class PortfolioMessageReport {
     private Map<String, BigDecimal> getDataFromPosition(List<Position> position) {
         Map<String, BigDecimal> sectorData = new HashMap<>();
         for (Position currPosition : position) {
-            ImoexPositionDTO share = positionService.getShareDTO(currPosition.getFigi());
+            ImoexPositionDTO share = positionService.getImoexPositionDTO(currPosition.getFigi());
             if (sectorData.containsKey(share.getSector())) {
                 sectorData.computeIfPresent(share.getSector(), (price, sumSector) -> sumSector.add(currPosition.getCurrentPrice().getValue().multiply(currPosition.getQuantity())));
             } else {
@@ -89,34 +112,5 @@ public class PortfolioMessageReport {
             }
         }
         return sectorData;
-    }
-
-    public String getReportPeriod(List<Operation> reportResponse) {
-        Map<String, BigDecimal> reportData = getReportDataMap(reportResponse);
-        return getResultReportData(reportData);
-    }
-
-    private String getResultReportData(Map<String, BigDecimal> reportData) {
-        StringBuilder result = new StringBuilder();
-        for (Map.Entry<String, BigDecimal> data : reportData.entrySet()) {
-            String formattedLine = String.format("%-10s : %2s", data.getKey(), formantNumber(data.getValue().setScale(2, RoundingMode.HALF_UP)));
-            result.append(formattedLine).append("\n");
-        }
-        return result.toString();
-    }
-
-    private Map<String, BigDecimal> getReportDataMap(List<Operation> reportResponse) {
-        Map<String, BigDecimal> reportData = new HashMap<>();
-        for (Operation operation : reportResponse) {
-            MoneyValueDTO moneyValue = new MoneyValueDTO(operation.getPayment());
-            if (operation.getState().getNumber() == 1) {
-                if (reportData.containsKey(operation.getType())) {
-                    reportData.computeIfPresent(operation.getType(), (payment, sumOperation) -> sumOperation.add(moneyValue.getMoneyValue()));
-                } else {
-                    reportData.put(operation.getType(), moneyValue.getMoneyValue());
-                }
-            }
-        }
-        return reportData;
     }
 }

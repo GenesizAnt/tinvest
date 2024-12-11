@@ -1,11 +1,8 @@
 package com.investinfo.capital.telegram;
 
-import com.investinfo.capital.controller.portfolio.PortfolioController;
-import com.investinfo.capital.service.ServiceMessagesInitiatedClient;
-import com.investinfo.capital.telegram.config.ValidationPerson;
+//import com.investinfo.capital.controller.portfolio.PortfolioController;
 import com.investinfo.capital.telegram.msgsender.MainMessageService;
-import com.investinfo.capital.telegram.msgsender.PrepareResponse;
-import org.junit.jupiter.api.BeforeEach;
+//import com.investinfo.capital.telegram.msgsender.PrepareResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -19,14 +16,14 @@ class MainMessageServiceTest {
 
     private MainMessageService messageService;
 
-    @BeforeEach
-    public void setUp() {
-        ValidationPerson validationPerson = Mockito.mock(ValidationPerson.class);
-        PortfolioController portfolioController = Mockito.mock(PortfolioController.class);
-        PrepareResponse prepareResponse = Mockito.mock(PrepareResponse.class);
-        ServiceMessagesInitiatedClient serviceMessagesInitiatedClient = Mockito.mock(ServiceMessagesInitiatedClient.class);
-        messageService = new MainMessageService(validationPerson, portfolioController, prepareResponse, serviceMessagesInitiatedClient);
-    }
+//    @BeforeEach
+//    public void setUp() {
+//        ValidationPerson validationPerson = Mockito.mock(ValidationPerson.class);
+//        PortfolioController portfolioController = Mockito.mock(PortfolioController.class);
+//        PrepareResponse prepareResponse = Mockito.mock(PrepareResponse.class);
+//        ServiceMessagesInitiatedClient serviceMessagesInitiatedClient = Mockito.mock(ServiceMessagesInitiatedClient.class);
+//        messageService = new MainMessageService(validationPerson, portfolioController, prepareResponse, serviceMessagesInitiatedClient);
+//    }
 
     @Test
     public void testGetDayOfYear() throws Exception {

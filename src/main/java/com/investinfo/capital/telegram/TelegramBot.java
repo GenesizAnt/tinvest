@@ -49,16 +49,10 @@ public class TelegramBot extends TelegramLongPollingBot  {
         }
     }
 
-    //Todo этому методу здесь место??????????????????
-    @Scheduled(cron = "0 0 22 * * ?")
-    public void getAutoDayEndReport() {
-
-    }
-
     //Todo отчет по долям акций позиции в портфеле
 
     //Todo этому методу здесь место??????????????????
-//    @Scheduled(cron = "*/15 * * * * *")
+    @Scheduled(cron = "*/15 * * * * *")
     public void getTestEveryDayEndReport() {
         SendMessage sendMessage = scheduledMessageService.getEveryDayEndReport();
         try {
@@ -67,17 +61,6 @@ public class TelegramBot extends TelegramLongPollingBot  {
             throw new RuntimeException(e);
         }
     }
-
-//    public void notifySendler() {
-//        List<SendMessage> messageList = notifyMessageService.messageReceiver();
-//        try {
-//            for (SendMessage sendMessage : messageList) {
-//                execute(sendMessage);
-//            }
-//        } catch (TelegramApiException e) {
-//            log.error("Ошибка отправки сообщений по расписанию: " + messageList + ". Текст ошибки: " + e.getMessage());
-//        }
-//    }
 
     @Override
     public String getBotUsername() {

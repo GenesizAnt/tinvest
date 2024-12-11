@@ -1,4 +1,4 @@
-package com.investinfo.capital.entity;
+package com.investinfo.capital.dto;
 
 public record MessageResponse(String message) {
 }
