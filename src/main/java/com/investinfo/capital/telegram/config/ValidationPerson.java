@@ -34,5 +34,6 @@ public class ValidationPerson {
                 && update.getMessage().getFrom().getFirstName().equals(firstName)
                 && update.getMessage().getFrom().getLastName().equals(lastName)
                 && update.getMessage().getFrom().getIsBot() == isBot
-                && update.getMessage().getFrom().getUserName().equals(userName);}
+                && update.getMessage().getFrom().getUserName().equals(userName);
+    }
 }

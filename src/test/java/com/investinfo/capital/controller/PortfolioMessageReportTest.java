@@ -13,14 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PortfolioMessageReportTest {
 
-    private PortfolioMessageReport portfolioMessageReport;
-
-    @BeforeEach
-    public void setUp() {
-        ImoexPositionService imoexPositionService = Mockito.mock(ImoexPositionService.class);
-        portfolioMessageReport = new PortfolioMessageReport(imoexPositionService);
-    }
-
     @Test
     public void testFormantNumberWithPositiveValue() {
         BigDecimal amount = new BigDecimal("1234567.89");

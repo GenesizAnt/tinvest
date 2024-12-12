@@ -51,7 +51,6 @@ public class TelegramBot extends TelegramLongPollingBot  {
 
     //Todo отчет по долям акций позиции в портфеле
 
-    //Todo этому методу здесь место??????????????????
     @Scheduled(cron = "*/15 * * * * *")
     public void getTestEveryDayEndReport() {
         SendMessage sendMessage = scheduledMessageService.getEveryDayEndReport();
